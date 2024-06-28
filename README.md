@@ -1,1 +1,1 @@
-# hospitality-management-client
+Client for hospitality management project

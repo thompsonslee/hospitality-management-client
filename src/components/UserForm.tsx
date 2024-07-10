@@ -25,7 +25,6 @@ export default function UserForm({formType}:props){
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault()
-        console.log(formData)
         if(formType === "register"){
             if(formData.password != formData.pwConfirm){
                 setErrors("password does not match")
@@ -45,6 +44,7 @@ export default function UserForm({formType}:props){
         if(formType === "login"){
             fetch("http://localhost:3000/login",{
                 method: "post",
+                credentials: "include",
                 headers: {
                     "content-type": "application/json;charset=UTF-8"
                 },

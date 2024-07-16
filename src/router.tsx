@@ -5,6 +5,7 @@ import ErrorPage from "./pages/Error"
 import LoginPage from "./pages/LoginPage"
 import Areas from "./pages/Areas"
 import Area from "./pages/Area"
+import OrderItems from "./pages/OrderItems"
 
 
 
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
       {
         path: "/area/:areaId",
         element: <Area />
+      },
+      {
+        path: "/area/:areaId/orderItems",
+        element: <OrderItems />
       }
     ]
 

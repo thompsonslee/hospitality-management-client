@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom"
 import Loading from "./Loading"
 import ProductInstance from "../components/ProductInstance"
 
+const url: string = import.meta.env.VITE_API_URL
+console.log(url)
 type area = {
     _id: string,
     name: string,
@@ -30,7 +32,7 @@ export default function Area(){
 
     useEffect(() => {
         const getData = async() => {
-            const data = await fetch(`http://localhost:3000/area/${areaId}`,
+            const data = await fetch(`${url}/area/${areaId}`,
                 {
                     credentials: "include",
                     headers: {
@@ -52,6 +54,7 @@ export default function Area(){
             ) : (
                 <>
                     <header>{area.name}</header>
+                    <a href={`/area/${areaId}/orderItems`}>Order Items</a>
                     <ul>
                         {products.map((product) => {
                             return(

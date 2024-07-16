@@ -3,6 +3,10 @@ export interface CartItem {
     quantity: number
 }
 
+export interface CartItemWithID extends CartItem {
+    tempID: number
+}
+
 export interface Product {
     _id: string,
     name: string,

@@ -6,6 +6,8 @@ import LoginPage from "./pages/LoginPage"
 import Areas from "./pages/Areas"
 import Area from "./pages/Area"
 import OrderItems from "./pages/OrderItems"
+import TransferItems from "./pages/TransferItems"
+import CreateArea from "./pages/CreateArea"
 
 
 
@@ -24,12 +26,20 @@ const router = createBrowserRouter([
         element: <Areas />
       },
       {
+        path: "/areas/create",
+        element: <CreateArea />
+      },
+      {
         path: "/area/:areaId",
         element: <Area />
       },
       {
         path: "/area/:areaId/orderItems",
         element: <OrderItems />
+      },
+      {
+      path: "area/:areaId/transferItems",
+      element: <TransferItems />
       }
     ]
 

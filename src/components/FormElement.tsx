@@ -14,7 +14,8 @@ export default function userFormElement({name,data,type,onChange}:Props){
                 name={name}
                 type={type}
                 value={data}
-                onChange={onChange}></input>
+                onChange={onChange}>
+            </input>
         </div>
     )
 }

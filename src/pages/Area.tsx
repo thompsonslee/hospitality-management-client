@@ -1,34 +1,18 @@
 import { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
+import { useParams, useNavigate } from "react-router-dom"
 import Loading from "./Loading"
-import ProductInstance from "../components/ProductInstance"
+import ProductInstanceDiv from "../components/ProductInstance"
+import {area, ProductInstance} from "../Types"
 
 const url: string = import.meta.env.VITE_API_URL
 console.log(url)
-type area = {
-    _id: string,
-    name: string,
-    user: string
-} | null
-
-type productInstance = {
-    _id: string,
-    area: string,
-    product: {
-        name: string,
-        price: {
-            retail: number,
-            wholesale: number
-        }
-    },
-    quantity: number
-}
 
 export default function Area(){
     const [area,setArea] = useState <area>(null)
-    const [products,setProducts] = useState <productInstance[]> ([])
+    const [products,setProducts] = useState <ProductInstance[]> ([])
 
     const areaId = useParams().areaId
+    const navigate = useNavigate()
 
     useEffect(() => {
         const getData = async() => {
@@ -40,12 +24,15 @@ export default function Area(){
                     }
                 }
             )
+            if(data.status != 200){
+                navigate("/login")
+            }
             const {area, productInstances} = await data.json()
             setArea(area)
             setProducts(productInstances)
         }
         getData()
-    },[areaId])
+    },[areaId,navigate])
 
     return(
         <>
@@ -55,11 +42,12 @@ export default function Area(){
                 <>
                     <header>{area.name}</header>
                     <a href={`/area/${areaId}/orderItems`}>Order Items</a>
+                    <a href={`/area/${areaId}/transferItems`}>Transfer Items</a>
                     <ul>
                         {products.map((product) => {
                             return(
                                 <li key={product._id}>
-                                    <ProductInstance productInstance={product} />
+                                    <ProductInstanceDiv productInstance={product} />
                                 </li>
                             )
                         })}

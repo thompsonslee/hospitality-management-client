@@ -1,6 +1,7 @@
-import UserFormElement from "./UserFormElement"
+import UserFormElement from "./FormElement"
 import { useState } from "react"
 import UserFormErrorBox from "./UserFormErrorBox"
+import { useNavigate } from "react-router-dom"
 interface props {
     formType: "login" | "register"
 
@@ -13,6 +14,8 @@ type formData = {
 
 
 export default function UserForm({formType}:props){
+
+    const navigate = useNavigate()
 
     const initalFormData:formData = {
         username: "",
@@ -50,7 +53,12 @@ export default function UserForm({formType}:props){
                 },
                 body: JSON.stringify(formData)
             }).then(
-                (res) => console.log(res)
+                (res) => {
+                    if(res.status === 200){
+                        navigate("/")
+                    }
+                    else(setErrors("username or password incorrect"))
+                }
             ).catch((e) => console.log(e))
             return
             

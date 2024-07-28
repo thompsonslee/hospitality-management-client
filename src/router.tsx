@@ -48,17 +48,16 @@ const router = createBrowserRouter([
       }
     ]
 
-    
-  },
-  {
-    path: "/register",
-    element:<LoginPage type="register" />
-  },
-  {
-    path: "/login",
-    element: <LoginPage type="login"/>
-  }
-])
-
+      
+    },
+    {
+      path: "/register",
+      element:<LoginPage type="register" />
+    },
+    {
+      path: "/login",
+      element: <LoginPage type="login"/>
+    }
+  ])
 
 export default router

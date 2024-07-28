@@ -22,6 +22,14 @@ export interface Product {
     }
 }
 
+export interface Transaction {
+    type: "buy"|"sell"
+    cost: number
+    user: string
+    area: string
+    Date: string
+}
+
 export type area = {
     _id: string,
     name: string,

@@ -8,6 +8,7 @@ import Area from "./pages/Area"
 import OrderItems from "./pages/OrderItems"
 import TransferItems from "./pages/TransferItems"
 import CreateArea from "./pages/CreateArea"
+import Transactions from "./pages/Transactions"
 
 
 
@@ -38,8 +39,12 @@ const router = createBrowserRouter([
         element: <OrderItems />
       },
       {
-      path: "area/:areaId/transferItems",
+      path: "/area/:areaId/transferItems",
       element: <TransferItems />
+      },
+      {
+        path: "/transactions",
+        element: <Transactions />
       }
     ]
 

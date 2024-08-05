@@ -9,7 +9,12 @@ import TransferItems from "./pages/TransferItems"
 import Transactions from "./pages/Transactions"
 import LoginPage from "./pages/LoginPage"
 import Loading from "./pages/Loading"
+import AllTillsPage from "./pages/AllTillsPage"
 import { useState } from "react"
+import CreateTill from "./pages/CreateTill"
+import AreaTills from "./pages/AreaTills"
+import Till from "./pages/Till"
+
 const url: string = import.meta.env.VITE_API_URL
 
 
@@ -36,7 +41,11 @@ const ProtectedRoutes = () => {
 
     if(authStatus === 'loading') return(<Loading />)
     if(authStatus === 'unauthorized')return (<Navigate to={"/login"} />)
-    if(authStatus === 'authorized')return(<><Nav /><Outlet /></>)
+    if(authStatus === 'authorized')return(
+    <div className="flex">
+        <Nav />
+        <Outlet />
+    </div>)
 }
 
 export default function App(){
@@ -46,10 +55,14 @@ export default function App(){
                 <Route path="/" element={<ProtectedRoutes />}>
                     <Route path="/home" element={<Home />} />
                     <Route path="/areas/" element={<Areas /> } />
+                    <Route path="/tillLayouts" element={<AllTillsPage />} />
+                    <Route path="/createTill" element={<CreateTill />} />
                     <Route path="/areas/create" element={<CreateArea />} />
                     <Route path="/area/:areaId" element={<Area />}/>
                     <Route path="/area/:areaId/orderItems" element={<OrderItems />} />
                     <Route path="/area/:areaId/transferItems" element={<TransferItems />} />
+                    <Route path="/area/:areaId/tillLayouts/" element={<AreaTills />}/>
+                    <Route path="/area/:areaId/tillLayouts/:tillLayoutId" element={<Till />}/>
                     <Route path="/transactions" element={<Transactions />} />
                 </Route>
                 <Route path="/login" element={<LoginPage type="login" />} />

@@ -29,9 +29,17 @@ export interface Transaction {
     area: string
     Date: string
 }
+export type TillItem = Product | null
 
 export type area = {
     _id: string,
     name: string,
     user: string
 } | null
+
+export interface TillDivInfo{product: Product, row: number, column: number}
+
+export interface Clicked {
+    mouseEvent: React.MouseEvent<HTMLDivElement,MouseEvent>,
+    tillGridIndex:{row: number, column: number}
+}

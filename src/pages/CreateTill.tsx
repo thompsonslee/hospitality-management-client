@@ -1,10 +1,11 @@
 import TillGrid from "../components/TillGrid"
-import { TillItem,area,Product,TillDivInfo } from "../Types"
+import { TillItem,area,Product } from "../Types"
 import { useEffect, useReducer } from "react"
 
 interface InitState{
-    till: TillItem[][]
+    till: TillItem[]
     displayTill: boolean
+    size: number
     areas: area[]
     selectedAreaId?: string 
     products?: Product[]
@@ -24,14 +25,14 @@ interface Action{
     areas?: area[]
     areaId?: string
     products?: Product[]
-    tillDivInfo?: TillDivInfo
+    tillItem?: TillItem
 }
 
 const reducer = (state: InitState, action: Action):InitState => {
     switch(action.type){
         case("GRID_SIZE_CHANGE"):
-            if(!action.size) return {...state, till: returnEmptyGrid(5)}
-            return {...state, till: returnEmptyGrid(action.size)}
+            if(!action.size) return {...state, size: 5}
+            return {...state, size:action.size}
         case("DISPLAY_TILL"):
             return{...state, displayTill: true}
         case("SET_AREAS"):
@@ -43,32 +44,24 @@ const reducer = (state: InitState, action: Action):InitState => {
         case("SET_PRODUCTS"):
             return{...state, products: action.products}
         case("SET_GRID_DIV_PRODUCT"):
-            if(!action.tillDivInfo) throw new Error("no tillDivInfo given")
-            return{...state, till: modifyTillDiv(state.till, action.tillDivInfo )}
+            if(!action.tillItem) throw new Error("no tillItem given")
+            return{...state, till: modifyTillDiv(state.till, action.tillItem )}
         default: throw new Error(`invalid action type, action type: ${action.type}`)
     }
 }
 
-const modifyTillDiv = (till: TillItem[][], tillDivInfo: TillDivInfo):TillItem[][] => {
-    const newTill = till
-    newTill[tillDivInfo.row][tillDivInfo.column] = tillDivInfo.product
-    return newTill
-}
+const modifyTillDiv = (till: TillItem[], tillItem: TillItem):TillItem[] => {
 
-const returnEmptyGrid = (size: number) => {
-    const array = []
-    for(let i = 0; i < size; i++){
-        const rowArray = []
-        for(let j = 0; j < size; j++){
-            rowArray.push(null)
+    const updatedTill = till
+    for(let i=0; i<updatedTill.length; i++){
+        if(updatedTill[i].row === tillItem.row && updatedTill[i].row === tillItem.column){
+            updatedTill[i].product = tillItem.product
+            return updatedTill
         }
-        array.push(rowArray)
     }
-    return array
+    updatedTill.push(tillItem)
+    return updatedTill
 }
-
-
-
 
 export default function Till(){
 
@@ -76,6 +69,7 @@ export default function Till(){
 
     const initialArgs: InitState = {
         till: [],
+        size: 5,
         displayTill: false,
         areas: [],
         selectedAreaId: undefined,
@@ -84,12 +78,12 @@ export default function Till(){
 
     const [state, dispatch] = useReducer(reducer,initialArgs)
 
-    const modifyTillDiv = (tillDivInfo: TillDivInfo) => {
-        dispatch({type:"SET_GRID_DIV_PRODUCT", tillDivInfo: tillDivInfo})
+    const modifyTillDiv = (tillItem: TillItem) => {
+        dispatch({type:"SET_GRID_DIV_PRODUCT", tillItem: tillItem})
     }
 
-    const convertTillItemsToIds = (till: TillItem[][]) => {
-        return till.map(row => row.map(tillItem => tillItem ? tillItem._id : null))
+    const convertTillItemsToIds = (till: TillItem[]) => {
+        return till.map((tillItem) => { return({...tillItem, product: tillItem.product._id})} )
     }
 
     const handleTillSubmit = async() => {
@@ -100,14 +94,13 @@ export default function Till(){
             headers: {
                 "Content-Type": "application/json; charset=UTF-8"
             },
-            body: JSON.stringify({grid: convertTillItemsToIds(state.till)})
+            body: JSON.stringify({gridItems: convertTillItemsToIds(state.till),size: state.size})
         })
         console.log(data.statusText)
     }
 
 
     useEffect(() =>{
-        dispatch({type: "GRID_SIZE_CHANGE", size: 5})
         const fetchAndSetAreas = async() => {
             const data = await fetch(`${url}/area`,{
                 credentials: "include",
@@ -140,6 +133,7 @@ export default function Till(){
                 <>
                     <TillGrid 
                         tillArray={state.till}
+                        size={state.size}
                         products={state.products}
                         modifyTillDiv={modifyTillDiv}
                     />

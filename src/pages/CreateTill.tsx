@@ -3,6 +3,7 @@ import { TillItem,area,Product } from "../Types"
 import { useEffect, useReducer } from "react"
 
 interface InitState{
+    name: string
     till: TillItem[]
     displayTill: boolean
     size: number
@@ -12,6 +13,7 @@ interface InitState{
 }
 
 type ActionTypes = 
+    'CHANGE_TILL_NAME' |
     'GRID_SIZE_CHANGE' |
     'DISPLAY_TILL' |
     'SET_AREAS' |
@@ -21,6 +23,7 @@ type ActionTypes =
 
 interface Action{
     type: ActionTypes
+    name?: string
     size?: number
     areas?: area[]
     areaId?: string
@@ -30,6 +33,9 @@ interface Action{
 
 const reducer = (state: InitState, action: Action):InitState => {
     switch(action.type){
+        case("CHANGE_TILL_NAME"):
+            if(!action.name) throw new Error("no name given")
+            return{...state, name: action.name}
         case("GRID_SIZE_CHANGE"):
             if(!action.size) return {...state, size: 5}
             return {...state, size:action.size}
@@ -68,6 +74,7 @@ export default function Till(){
     const url: string = import.meta.env.VITE_API_URL
 
     const initialArgs: InitState = {
+        name: "",
         till: [],
         size: 5,
         displayTill: false,
@@ -94,7 +101,11 @@ export default function Till(){
             headers: {
                 "Content-Type": "application/json; charset=UTF-8"
             },
-            body: JSON.stringify({gridItems: convertTillItemsToIds(state.till),size: state.size})
+            body: JSON.stringify({
+                name: state.name,
+                gridItems: convertTillItemsToIds(state.till),
+                size: state.size
+            })
         })
         console.log(data.statusText)
     }
@@ -144,6 +155,14 @@ export default function Till(){
                     <form className="flex flex-col justify-center" onSubmit={(e) => {
                         e.preventDefault()
                         dispatch({type: "DISPLAY_TILL"})}}>
+                        <div className="flex flex-col">
+                            <label>Till Name</label>
+                            <input
+                                required={true}
+                                type="text"
+                                onChange={(e) => dispatch({type: "CHANGE_TILL_NAME", name: e.target.value})}
+                            ></input>
+                        </div>
                         <div className="flex flex-col">
                             <label>Select area for till</label>
                             <select 

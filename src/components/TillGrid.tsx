@@ -1,32 +1,17 @@
-import { TillItem,Product, Clicked} from "../Types";
-import ProductDropdown from "./ProductDropdown";
+import { TillItem,Product, HandleClick} from "../Types";
 import TillGridDiv from "./TillGridDiv";
-import { useEffect, useState } from "react";
 
 interface Props{
     tillArray: TillItem[]
     size: number
     products: Product[] | undefined
-    modifyTillDiv: (tillItem: TillItem) => void
+    handleClick: HandleClick
+    children: React.ReactNode | undefined
 }
 
 
 
-export default function TillGrid({tillArray, size, products, modifyTillDiv}:Props){
-    const [clicked, isClicked] = useState<Clicked | null>(null)
-
-    const handleDivClick = (e: React.MouseEvent<HTMLDivElement,MouseEvent>, tillGridIndex:{row: number, column: number}) => {
-        isClicked({mouseEvent: e,tillGridIndex:tillGridIndex})
-    }
-    
-    useEffect(() => {
-        document.addEventListener("click",(e) => {
-            const element = (e.target as Element)
-            if(!element.classList.contains("tillGridDiv")){
-                isClicked(null)
-            }
-        })
-    },[])
+export default function TillGrid({tillArray, size, handleClick, children}:Props){
 
     const getTillItemAtIndex = (row:number,column:number) => {
         return tillArray.find((tillItem) => tillItem.row === row && tillItem.column === column)
@@ -39,7 +24,7 @@ export default function TillGrid({tillArray, size, products, modifyTillDiv}:Prop
                 <TillGridDiv 
                     tillItem={getTillItemAtIndex(i,j)}
                     tillGridIndex={{row:i,column:j}}
-                    onClick={handleDivClick}
+                    handleClick={handleClick}
                     key={Math.random()}
 
                 />
@@ -61,13 +46,12 @@ export default function TillGrid({tillArray, size, products, modifyTillDiv}:Prop
     }
     return(
         <div className="aspect-square w-full m-8">
-            {clicked && <ProductDropdown clicked={clicked} products={products} modifyTillDiv={modifyTillDiv} />}
             <div className="flex flex-col flex-grow aspect-square max-h-[80vh]">
                 {
                     renderGrid()
                 }
             </div>
-
+            {children}
         </div>
     )
 }

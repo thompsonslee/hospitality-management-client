@@ -45,3 +45,13 @@ export interface Clicked {
     mouseEvent: React.MouseEvent<HTMLDivElement,MouseEvent>,
     tillGridIndex:{row: number, column: number}
 }
+
+export type HandleClick = (mouseEvent:React.MouseEvent<HTMLDivElement,MouseEvent>,tillGridIndex:{row: number, column: number}) => void
+
+export interface TillLayout{
+    _id: string,
+    name: string,
+    area: string,
+    gridItems: TillItem[]
+    size: number
+}

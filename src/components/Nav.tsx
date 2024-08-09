@@ -12,6 +12,9 @@ export default function Nav(){
                 <li>
                     <Link to="/transactions">Transactions</Link>
                 </li>
+                <li>
+                    <Link to="/tillLayouts">Tills</Link>
+                </li>
             </ul>
 
         </div>

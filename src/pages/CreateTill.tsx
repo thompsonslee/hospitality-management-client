@@ -1,5 +1,6 @@
+import ProductDropdown from "../components/ProductDropdown"
 import TillGrid from "../components/TillGrid"
-import { TillItem,area,Product } from "../Types"
+import { TillItem,area,Product,HandleClick, Clicked } from "../Types"
 import { useEffect, useReducer } from "react"
 
 interface InitState{
@@ -10,6 +11,7 @@ interface InitState{
     areas: area[]
     selectedAreaId?: string 
     products?: Product[]
+    clicked: false | Clicked
 }
 
 type ActionTypes = 
@@ -19,7 +21,8 @@ type ActionTypes =
     'SET_AREAS' |
     'SET_AREA_ID' |
     'SET_PRODUCTS' |
-    'SET_GRID_DIV_PRODUCT'
+    'SET_GRID_DIV_PRODUCT'|
+    'SET_CLICKED'
 
 interface Action{
     type: ActionTypes
@@ -29,6 +32,7 @@ interface Action{
     areaId?: string
     products?: Product[]
     tillItem?: TillItem
+    clicked?: false | Clicked
 }
 
 const reducer = (state: InitState, action: Action):InitState => {
@@ -52,10 +56,14 @@ const reducer = (state: InitState, action: Action):InitState => {
         case("SET_GRID_DIV_PRODUCT"):
             if(!action.tillItem) throw new Error("no tillItem given")
             return{...state, till: modifyTillDiv(state.till, action.tillItem )}
+        case("SET_CLICKED"):
+            if(!action.clicked){
+                return{...state, clicked: false}
+            }
+            return{...state, clicked:action.clicked}
         default: throw new Error(`invalid action type, action type: ${action.type}`)
     }
 }
-
 const modifyTillDiv = (till: TillItem[], tillItem: TillItem):TillItem[] => {
 
     const updatedTill = till
@@ -80,13 +88,22 @@ export default function Till(){
         displayTill: false,
         areas: [],
         selectedAreaId: undefined,
-        products: undefined
+        products: undefined,
+        clicked: false
     }
 
     const [state, dispatch] = useReducer(reducer,initialArgs)
 
+    const handleClick:HandleClick = (mouseEvent, tillGridIndex) => {
+        const element = mouseEvent.target as Element
+        if(!element.classList.contains("tillGridDiv")){
+            dispatch({type:"SET_CLICKED", clicked: false})
+        }
+        dispatch({type: "SET_CLICKED", clicked: {mouseEvent, tillGridIndex}})
+    }
     const modifyTillDiv = (tillItem: TillItem) => {
         dispatch({type:"SET_GRID_DIV_PRODUCT", tillItem: tillItem})
+        dispatch({type: "SET_CLICKED", clicked: false})
     }
 
     const convertTillItemsToIds = (till: TillItem[]) => {
@@ -142,12 +159,20 @@ export default function Till(){
         <div className="flex flex-grow justify-center items-center">
             {(state.displayTill) ? (
                 <>
-                    <TillGrid 
+                    <TillGrid
                         tillArray={state.till}
                         size={state.size}
                         products={state.products}
-                        modifyTillDiv={modifyTillDiv}
-                    />
+                        handleClick={handleClick}
+                        >
+                            {state.clicked && (
+                                <ProductDropdown
+                                    clicked={state.clicked}
+                                    products={state.products}
+                                    modifyTillDiv={modifyTillDiv}
+                                />
+                            )}
+                    </TillGrid>
                     <button onClick={() => handleTillSubmit()}>submit</button>
                 </>
             ) : (

@@ -1,12 +1,11 @@
-import { TillItem,Product, HandleClick} from "../Types";
+import { TillItem, HandleClick, TillInstanceItem} from "../Types";
 import TillGridDiv from "./TillGridDiv";
 
 interface Props{
-    tillArray: TillItem[]
+    tillArray: TillItem[]| TillInstanceItem[]
     size: number
-    products: Product[] | undefined
     handleClick: HandleClick
-    children: React.ReactNode | undefined
+    children?: React.ReactNode
 }
 
 
@@ -45,7 +44,7 @@ export default function TillGrid({tillArray, size, handleClick, children}:Props)
 
     }
     return(
-        <div className="aspect-square w-full m-8">
+        <div className="aspect-square h-full flex" >
             <div className="flex flex-col flex-grow aspect-square max-h-[80vh]">
                 {
                     renderGrid()

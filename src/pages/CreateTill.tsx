@@ -162,7 +162,6 @@ export default function Till(){
                     <TillGrid
                         tillArray={state.till}
                         size={state.size}
-                        products={state.products}
                         handleClick={handleClick}
                         >
                             {state.clicked && (

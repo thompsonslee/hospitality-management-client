@@ -30,7 +30,13 @@ export interface Transaction {
     Date: string
 }
 export interface TillItem{
-    product: Product,
+    product: Product ,
+    row: number,
+    column: number
+}
+export interface TillInstanceItem{
+    name?: string
+    instance?: ProductInstance 
     row: number,
     column: number
 }
@@ -46,12 +52,23 @@ export interface Clicked {
     tillGridIndex:{row: number, column: number}
 }
 
-export type HandleClick = (mouseEvent:React.MouseEvent<HTMLDivElement,MouseEvent>,tillGridIndex:{row: number, column: number}) => void
+export type HandleClick = (
+    mouseEvent:React.MouseEvent<HTMLDivElement,MouseEvent>,
+    tillGridIndex:{row: number, column: number},
+    tillItem?: TillItem | TillInstanceItem
+) => void
 
 export interface TillLayout{
     _id: string,
     name: string,
     area: string,
     gridItems: TillItem[]
+    size: number
+}
+export interface TillLayoutWithInstanceItems{
+    _id: string,
+    name: string,
+    area: string,
+    gridItems: TillInstanceItem[]
     size: number
 }

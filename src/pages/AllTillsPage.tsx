@@ -32,7 +32,7 @@ export default function AllTillsPage(){
             {
                 tills.map((till) => {
                     return(
-                        <div className="flex flex-col justify-center items-center">
+                        <div key={till._id} className="flex flex-col justify-center items-center">
                             <p>{till.name}</p>
                             <Link to={"/"}>Edit Till WIP</Link>
                             <Link to={`/area/${till.area}/tillLayouts/${till._id}`}>Display Till</Link>

@@ -40,20 +40,19 @@ export default function Areas(){
                 <Loading />
             ) : (
                 <>
-                    {(areas.length) ? (
-                        <ul>
-                            {areas.map((area) => {
-                                return(
-                                    <li key={area._id}>
-                                        <a href={`/area/${area._id}`}>{area.name}</a>
-                                    </li>
-                                )
-                            })}
-                        </ul>
-                    ) : (
-                        <div>No areas</div>
-                    )}
-                    <a href="/areas/create">Create Area</a>
+
+                    <ul>
+                        {areas.map((area) => {
+                            return(
+                                <li className="p-5 text-lg bg-zinc800 text-white flex justify-center items-center m-2" key={area._id}>
+                                    <a href={`/area/${area._id}`}>{area.name}</a>
+                                </li>
+                            )
+                        })}
+                        <li className="p-5 text-lg bg-zinc800 text-white m-2">
+                            <a href="/areas/create">Create Area</a>
+                        </li>
+                    </ul>    
                 </>
             )}
         </>

@@ -47,7 +47,3 @@ export const createUpdatedCartAndGridItems = (itemId: string, gridItems:TillInst
     }
     return{newGridItems,newCart}
 }
-
-const handleSubmit = () => {
-    
-}

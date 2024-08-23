@@ -71,7 +71,7 @@ export default function UserForm({formType}:props){
         setFormData({...formData,[name]: value})
     }
     return(
-        <form onSubmit={(e) => handleSubmit(e)}>
+        <form className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-zinc800 flex flex-col justify-center items-stretch p-10 rounded" onSubmit={(e) => handleSubmit(e)}>
             {(errors) && (
                 <UserFormErrorBox error={errors}/>
             )}
@@ -89,13 +89,13 @@ export default function UserForm({formType}:props){
             />
             {((formType === "register") && (formData.pwConfirm || formData.pwConfirm === "")) && (
                 <UserFormElement
-                    name = "pwConfirm"
+                    name = "confirm password"
                     data = {formData.pwConfirm}
                     type = "password"
                     onChange={handleChange}
-                 />
+                />
             )}
-            <button type="submit">Submit</button>
+            <button className="bg-green600 rounded p-2 mt-5 text-white" type="submit">Submit</button>
         </form>
     )
 }

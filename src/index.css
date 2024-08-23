@@ -4,4 +4,12 @@
 
 *{
     min-width: 0;
+    box-sizing: border-box;
+}
+label{
+    color: white;
+}
+
+:root{
+    background-color: #18181b;
 }

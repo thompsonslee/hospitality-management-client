@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { ProductInstance, area } from "../Types"
 import TransferItemsList from "../components/TransferItemsList"
 import ItemsToTransferList from "../components/ItemsToTransferList"
@@ -11,6 +11,7 @@ export default function TransferItems(){
     const [currAreaItems, setCurrAreaItems] = useState<ProductInstance[]>([])
     const [nextAreaItems, setNextAreaItems] = useState<ProductInstance[]>([])
 
+    const navigate = useNavigate()
     const areaId = useParams().areaId
     const url: string = import.meta.env.VITE_API_URL
 
@@ -60,7 +61,7 @@ export default function TransferItems(){
     }
 
     const handleSuccess = () => {
-        console.log("success")
+        navigate(`/area/${areaId}`)
     }
     const handleFailure = (response: Response) => {
         console.log(response.status)
@@ -117,19 +118,33 @@ export default function TransferItems(){
     },[areaId,url])
     return(
         <>
-            <div className="flex border border-solid" >
-                <TransferItemsList 
-                    items={currAreaItems} 
-                    transferItem={transferItem} 
-                />
-                <ItemsToTransferList 
-                    items = {nextAreaItems} 
-                    cancelItemTransfer={cancelItemTransfer}
-                    areas={allAreas}
-                    setAreaId ={newAreaIdHandler}
-                />
+            <div className="flex flex-col items-center justify-between w-full h-screen p-5">
+                <div className="flex text-white m-5 gap-10 w-full">
+                    <TransferItemsList 
+                        areaName={area?.name}
+                        items={currAreaItems} 
+                        transferItem={transferItem} 
+                    />
+                    <ItemsToTransferList 
+                        areaName={allAreas.find(area => area?._id === selectedAreaId)?.name}
+                        items = {nextAreaItems} 
+                        cancelItemTransfer={cancelItemTransfer}
+                    />
+                </div>
+                <div className="flex justify-self-end gap-2 self-end">
+                    <select className="rounded p-5 bg-zinc600 text-white" defaultValue={""} onChange={(e) => newAreaIdHandler(e.target.value)} >
+                        <option disabled value={""}>Choose Area to transfer</option>
+                        {allAreas.map((area) => {
+                            return(
+                                <option key={area?._id} value={area?._id}>{area?.name}</option>
+                            )
+                        })}
+
+                    </select>
+                    <button className="rounded p-5 bg-zinc600 text-white hover:bg-green600" onClick={() => submitHandler()}>submit</button>
+                </div>
             </div>
-            <button onClick={() => submitHandler()}>submit</button>
+
         </>
     )
 }

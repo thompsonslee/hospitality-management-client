@@ -1,19 +1,19 @@
 import { Link } from "react-router-dom"
 export default function Nav(){
     return(
-        <div className="h-screen bg-zinc600 tex max-w-72 w-full flex justify-center text-white p-10">
-            <ul>
-                <li>
-                    <Link to="/">Home</Link>
+        <div className="h-screen max-w-72 bg-zinc800 w-full">
+            <ul className="flex flex-col gap-5 justify-stretch items-stretch p-2">
+                <li className="flex items-stretch">
+                    <Link className="bg-zinc600 text-center w-full p-2 rounded text-white hover:bg-green600" to="/">Home</Link>
                 </li>
-                <li>
-                    <Link to="/areas">Areas</Link>
+                <li className="flex items-stretch">
+                    <Link className="bg-zinc600 text-center w-full p-2 rounded text-white hover:bg-green600" to="/areas">Areas</Link>
                 </li>
-                <li>
-                    <Link to="/transactions">Transactions</Link>
+                <li className="flex items-stretch">
+                    <Link className="bg-zinc600 text-center w-full p-2 rounded text-white hover:bg-green600" to="/transactions">Transactions</Link>
                 </li>
-                <li>
-                    <Link to="/tillLayouts">Tills</Link>
+                <li className="flex items-stretch">
+                    <Link className="bg-zinc600 text-center w-full p-2 rounded text-white hover:bg-green600" to="/tillLayouts">Tills</Link>
                 </li>
             </ul>
 

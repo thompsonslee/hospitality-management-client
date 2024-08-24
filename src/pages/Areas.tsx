@@ -41,16 +41,16 @@ export default function Areas(){
             ) : (
                 <>
 
-                    <ul>
+                    <ul className="m-5 flex gap-2">
                         {areas.map((area) => {
                             return(
-                                <li className="p-5 text-lg bg-zinc800 text-white flex justify-center items-center m-2" key={area._id}>
-                                    <a href={`/area/${area._id}`}>{area.name}</a>
+                                <li className="pt-5" key={area._id}>
+                                    <a className="p-5 text-lg rounded bg-zinc800 text-white hover:bg-green600" href={`/area/${area._id}`}>{area.name}</a>
                                 </li>
                             )
                         })}
-                        <li className="p-5 text-lg bg-zinc800 text-white m-2">
-                            <a href="/areas/create">Create Area</a>
+                        <li className="pt-5">
+                            <a className="p-5 text-lg rounded bg-zinc700 text-white hover:bg-green600" href="/areas/create">+</a>
                         </li>
                     </ul>    
                 </>

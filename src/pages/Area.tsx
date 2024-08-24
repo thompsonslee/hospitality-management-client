@@ -39,10 +39,12 @@ export default function Area(){
             {!area ? (
                 <Loading />
             ) : (
-                <>
-                    <header>{area.name}</header>
-                    <a href={`/area/${areaId}/orderItems`}>Order Items</a>
-                    <a href={`/area/${areaId}/transferItems`}>Transfer Items</a>
+                <div className=" flex flex-col m-5">
+                    <header className="text-white text-2xl mb-2">{area.name}</header>
+                    <div className="flex gap-2">
+                        <a className="p-5 rounded text-white bg-zinc800 hover:bg-green600" href={`/area/${areaId}/orderItems`}>Order Items</a>
+                        <a className="p-5 rounded text-white bg-zinc800 hover:bg-green600" href={`/area/${areaId}/transferItems`}>Transfer Items</a>
+                    </div>
                     <ul>
                         {products.map((product) => {
                             return(
@@ -53,7 +55,7 @@ export default function Area(){
                         })}
 
                     </ul>
-                </>
+                </div>
             )}
         </>
     )

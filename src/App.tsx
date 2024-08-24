@@ -42,10 +42,11 @@ const ProtectedRoutes = () => {
     if(authStatus === 'loading') return(<Loading />)
     if(authStatus === 'unauthorized')return (<Navigate to={"/login"} />)
     if(authStatus === 'authorized')return(
-    <div className="flex">
-        <Nav />
-        <Outlet />
-    </div>)
+        <div className="flex">
+            <Nav />
+            <Outlet />
+        </div>
+    )
 }
 
 export default function App(){

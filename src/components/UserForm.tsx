@@ -40,7 +40,11 @@ export default function UserForm({formType}:props){
                 },
                 body: JSON.stringify(formData)
             }).then(
-                (res) => console.log(res)
+                (res) => {
+                    if(res.status === 200){
+                        navigate("/")
+                    }
+                }
             ).catch((e) => console.log(e))
             return
         }
@@ -89,7 +93,7 @@ export default function UserForm({formType}:props){
             />
             {((formType === "register") && (formData.pwConfirm || formData.pwConfirm === "")) && (
                 <UserFormElement
-                    name = "confirm password"
+                    name = "pwConfirm"
                     data = {formData.pwConfirm}
                     type = "password"
                     onChange={handleChange}

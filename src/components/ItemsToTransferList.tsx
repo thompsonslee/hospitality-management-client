@@ -1,37 +1,37 @@
-import { ProductInstance,area } from "../Types"
+import { ProductInstance } from "../Types"
 
 interface Props{
+    areaName: string | undefined
     items: ProductInstance[]
     cancelItemTransfer: (id: string) => void
-    areas: area[]
-    setAreaId: (id: string) => void
 }
 
 
 
-export default function ItemsToTransferList({items,cancelItemTransfer,areas,setAreaId}:Props){
+export default function ItemsToTransferList({areaName, items,cancelItemTransfer}:Props){
 
-    const onChangehandler = (e:React.ChangeEvent<HTMLSelectElement>) => {
-        setAreaId(e.target.value)
-    }
 
     return(
-        <div>
-            <select defaultValue={""} onChange={(e) => onChangehandler(e)} >
-                <option disabled value={""}>Choose Area to transfer</option>
-                {areas.map((area) => {
-                    return(
-                        <option key={area?._id} value={area?._id}>{area?.name}</option>
-                    )
-                })}
-
-            </select>
-            <ul>
+        <div className="flex flex-col gap-2 w-1/2">
+            <h1 className="text-2xl self-center">{areaName ? (areaName) : ("No area selected")}</h1>
+            <ul className="flex gap-2">
                 {items.map((item) => {
                     return(
-                        <li key={item._id}>
-                            {item.product.name} quantity: {item.quantity}
-                            <button onClick={() => cancelItemTransfer(item._id)}>cancel</button>
+                        <li
+                            className="w-52 h-60 rounded p-5 bg-zinc800 flex flex-col justify-between" key={item._id}>
+                            <div>
+                                <p>
+                                    {item.product.name}
+                                </p>
+                                <p>
+                                    quantity: {item.quantity}
+                                </p>
+                            </div>
+                             
+                            <button className="rounded p-5 bg-zinc600 hover:bg-red600" 
+                                onClick={() => cancelItemTransfer(item._id)}>
+                                cancel
+                            </button>
                         </li>
                     )
                 })}

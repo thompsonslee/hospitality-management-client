@@ -4,6 +4,7 @@ export default {
   theme: {
     colors:{
       'zinc800': '#27272a',
+      'zinc700':'#3f3f46',
       'zinc600': '#52525b',
       'green600': '#16a34a',
       'red600': '#dc2626',

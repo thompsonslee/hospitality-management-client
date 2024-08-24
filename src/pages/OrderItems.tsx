@@ -2,14 +2,16 @@ import { useParams } from "react-router-dom"
 import CartItemInput from "../components/CartItemInput"
 import { CartItemWithID, Product } from "../Types"
 import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 
 export default function OrderItems(){
 
+    const navigate = useNavigate()
+
     const [products,setProducts] = useState<Product[]> ([])
     const [cartItems,setCartItems] = useState<CartItemWithID[]> ([])
 
-    console.log(cartItems)
     const areaID = useParams().areaId
     const url: string = import.meta.env.VITE_API_URL
 
@@ -29,7 +31,7 @@ export default function OrderItems(){
             },
             body: JSON.stringify({products: products})
         }).then((res) => {
-            console.log(res.status)
+            if(res.status === 200) navigate(`/area/${areaID}`)
         }).catch(() => {
             console.log("error with post request")
         })
@@ -37,6 +39,7 @@ export default function OrderItems(){
     }
 
     const handleInputChange = (value: string|number,tempID:number) => {
+
         setCartItems(cartItems.map((cartItem) => {
             if(cartItem.tempID === tempID){
                 if(typeof value === "string"){
@@ -47,8 +50,6 @@ export default function OrderItems(){
             }
             return cartItem
         }))
-        console.log(tempID)
-        console.log(value)
     }
     const handleInputDelete = (tempID:number) => {
         console.log("deleting item")
@@ -81,22 +82,27 @@ export default function OrderItems(){
 
     return(
         <>
-        <form>
-            {cartItems.map((cartItem) => {
-                return(
-                    <CartItemInput 
-                        key={cartItem.tempID}
-                        cartItem={cartItem}
-                        products={products}
-                        handleInputChange={handleInputChange}
-                        deleteInput={handleInputDelete}
-                    />)
-            })}
-            <button onClick={addItem} >+</button>
-            <button onClick={handleSubmit}>Submit</button>
+            <form className="m-5 flex flex-col gap-2">
+                <div className="flex gap-2">
+                    {cartItems.map((cartItem) => {
+                        return(
+                            <CartItemInput 
+                                key={cartItem.tempID}
+                                cartItem={cartItem}
+                                products={products}
+                                handleInputChange={handleInputChange}
+                                deleteInput={handleInputDelete}
+                            />)
+                    })}
+                    <button className="bg-zinc800 w-72 h-80 text-white flex justify-center items-center hover:bg-green600 rounded text-8xl"
+                     onClick={addItem}
+                    >+</button>
+                </div>
+                <div>
+                    <button className="p-5 rounded text-white bg-zinc800 hover:bg-green600" onClick={handleSubmit}>Submit</button>
+                </div>
 
-        </form>
-
+            </form>
         </>
     )
 }

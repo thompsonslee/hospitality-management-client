@@ -35,14 +35,14 @@ export default function CreateArea(){
     }
 
     return(
-        <form onSubmit={handleSubmit}>
+        <form className="m-5" onSubmit={handleSubmit}>
             <FormElement
                 name='name'
                 type="text"
                 data={areaName}
                 onChange={handleChange}
              />
-            <button>
+            <button className="p-5 text-lg rounded bg-zinc800 text-white hover:bg-green600">
                 Create
             </button>
         </form>

@@ -216,7 +216,7 @@ export default function Till(){
                                 onChange={(e) => dispatch({type: "GRID_SIZE_CHANGE", size: parseInt(e.target.value)})}>
                             </input>
                         </div>
-                        <button>continue</button>
+                        <button className="p-5 text-lg rounded bg-zinc800 text-white hover:bg-green600">continue</button>
                     </form>
                 </>
             )}

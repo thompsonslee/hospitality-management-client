@@ -28,18 +28,25 @@ export default function AllTillsPage(){
         fetchAndSetTillLayouts()
     },[])
     return(
-        <div>
+        <ul className="m-5 flex self-start gap-2">
             {
                 tills.map((till) => {
                     return(
-                        <div key={till._id} className="flex flex-col justify-center items-center">
+                        <li
+                            key={till._id} 
+                            className="flex flex-col p-5 gap-3 rounded items-center bg-zinc800 text-white">
                             <p>{till.name}</p>
-                            <Link to={"/"}>Edit Till WIP</Link>
-                            <Link to={`/area/${till.area}/tillLayouts/${till._id}`}>Display Till</Link>
-                        </div>
+                            <div className="flex flex-col gap-2">
+                                <Link className="rounded p-5 bg-zinc600 hover:bg-green600" to={"/"}>Edit Till WIP</Link>
+                                <Link className="rounded p-5 bg-zinc600 hover:bg-green600" to={`/area/${till.area}/tillLayouts/${till._id}`}>Display Till</Link>
+                            </div>
+                        </li>
                     )
                 })
             }
-        </div>
+            <li className="pt-5 text-white">
+                <Link className="rounded p-5 bg-zinc800 hover:bg-green600" to={"/createTill"}>+</Link>
+            </li>
+        </ul>
     )
 }

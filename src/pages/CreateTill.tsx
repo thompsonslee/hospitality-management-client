@@ -38,7 +38,7 @@ interface Action{
 const reducer = (state: InitState, action: Action):InitState => {
     switch(action.type){
         case("CHANGE_TILL_NAME"):
-            if(!action.name) throw new Error("no name given")
+            if(typeof action.name != "string") throw new Error("no string given")
             return{...state, name: action.name}
         case("GRID_SIZE_CHANGE"):
             if(!action.size) return {...state, size: 5}
@@ -176,12 +176,13 @@ export default function Till(){
                 </>
             ) : (
                 <>
-                    <form className="flex flex-col justify-center" onSubmit={(e) => {
+                    <form className="flex flex-col justify-center rounded bg-zinc800 p-5 gap-2 text-white" onSubmit={(e) => {
                         e.preventDefault()
                         dispatch({type: "DISPLAY_TILL"})}}>
                         <div className="flex flex-col">
                             <label>Till Name</label>
                             <input
+                                className="p-5 rounded bg-zinc600"
                                 required={true}
                                 type="text"
                                 onChange={(e) => dispatch({type: "CHANGE_TILL_NAME", name: e.target.value})}
@@ -190,6 +191,7 @@ export default function Till(){
                         <div className="flex flex-col">
                             <label>Select area for till</label>
                             <select 
+                                className="p-5 rounded bg-zinc600"
                                 required={true} 
                                 defaultValue={""}
                                 onChange={(e) => dispatch({type: "SET_AREA_ID", areaId: e.target.value})}
@@ -207,6 +209,7 @@ export default function Till(){
                         <div className="flex flex-col">
                             <label>Choose amout of rows</label>
                             <input 
+                                className="rounded p-5 bg-zinc600"
                                 required={true}
                                 max={10}
                                 min={5}
@@ -216,7 +219,7 @@ export default function Till(){
                                 onChange={(e) => dispatch({type: "GRID_SIZE_CHANGE", size: parseInt(e.target.value)})}>
                             </input>
                         </div>
-                        <button className="p-5 text-lg rounded bg-zinc800 text-white hover:bg-green600">continue</button>
+                        <button className="p-5 mt-5 text-lg rounded bg-zinc600 text-white hover:bg-green600">continue</button>
                     </form>
                 </>
             )}

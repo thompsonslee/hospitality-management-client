@@ -44,8 +44,8 @@ export default function TillGrid({tillArray, size, handleClick, children}:Props)
 
     }
     return(
-        <div className="aspect-square h-full flex" >
-            <div className="flex flex-col flex-grow aspect-square max-h-[80vh]">
+        <div className="aspect-square h-full flex text-white" >
+            <div className="flex flex-col flex-grow aspect-square max-h-[70vh]">
                 {
                     renderGrid()
                 }

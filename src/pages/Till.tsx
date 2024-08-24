@@ -163,7 +163,7 @@ export default function Till(){
             {(!state.till) ? (
                 <div>loading</div>
             ) : (
-                <div className="bg-white absolute w-full h-full flex justify-center items-stretch">
+                <div className="absolute w-full h-full flex justify-center bg-background items-stretch">
                     <TillGrid
                         tillArray={state.till.gridItems}
                         size={state.till.size}

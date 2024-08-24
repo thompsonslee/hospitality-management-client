@@ -22,12 +22,18 @@ const render = (item: TillItem | undefined | TillInstanceItem) => {
 export default function TillGridDiv({tillItem = undefined,handleClick,tillGridIndex}: props){
     return(
         <div 
-            onClick={
-                (e) => handleClick(e, tillGridIndex, tillItem)
-            } 
-            className="w-full h-full text-center flex justify-center items-center tillGridDiv border-solid border-2 min-h-10 min-w-10 overflow-hidden border-black aspect-square"
+            className="w-full h-full text-center flex
+             tillGridDiv border-solid min-h-10 min-w-10 overflow-hidden 
+             border-black aspect-square"
             >
+            <div  
+                className="flex items-center justify-center w-full h-full rounded bg-zinc800 m-1 mt-2 "          
+                onClick={
+                (e) => handleClick(e, tillGridIndex, tillItem)
+            }>
                 {render(tillItem)}
+            </div>
+
         </div>
     )
 }

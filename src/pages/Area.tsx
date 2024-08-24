@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 import Loading from "./Loading"
-import ProductInstanceDiv from "../components/ProductInstance"
 import {area, ProductInstance} from "../Types"
 
 const url: string = import.meta.env.VITE_API_URL
@@ -45,16 +44,20 @@ export default function Area(){
                         <a className="p-5 rounded text-white bg-zinc800 hover:bg-green600" href={`/area/${areaId}/orderItems`}>Order Items</a>
                         <a className="p-5 rounded text-white bg-zinc800 hover:bg-green600" href={`/area/${areaId}/transferItems`}>Transfer Items</a>
                     </div>
-                    <ul>
-                        {products.map((product) => {
-                            return(
-                                <li key={product._id}>
-                                    <ProductInstanceDiv productInstance={product} />
-                                </li>
-                            )
-                        })}
+                    <div className="bg-zinc800 rounded p-5 mt-2 text-white">
+                        <h2 className="text-xl">Inventory</h2>
+                        <ul className="flex gap-2 mt-3">
+                            {products.map((product) => {
+                                return(
+                                    <li className="p-5 rounded bg-zinc600" key={product._id}>
+                                        <strong>{product.product.name}</strong>
+                                        <p>Quantity: {product.quantity}</p>
+                                    </li>
+                                )
+                            })}
 
-                    </ul>
+                        </ul>
+                    </div>
                 </div>
             )}
         </>

@@ -63,7 +63,8 @@ export default function App(){
                     <Route path="/area/:areaId/orderItems" element={<OrderItems />} />
                     <Route path="/area/:areaId/transferItems" element={<TransferItems />} />
                     <Route path="/area/:areaId/tillLayouts/" element={<AreaTills />}/>
-                    <Route path="/area/:areaId/tillLayouts/:tillLayoutId" element={<Till />}/>
+                    <Route path="/area/:areaId/tillLayouts/:tillLayoutId" element={<Till />} />
+                    <Route path="/area/:areaId/tillLayouts/:tillLayoutId/edit" element={<CreateTill />} />
                     <Route path="/transactions" element={<Transactions />} />
                 </Route>
                 <Route path="/login" element={<LoginPage type="login" />} />

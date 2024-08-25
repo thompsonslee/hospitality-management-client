@@ -1,6 +1,7 @@
+import { useParams } from "react-router-dom"
 import ProductDropdown from "../components/ProductDropdown"
 import TillGrid from "../components/TillGrid"
-import { TillItem,area,Product,HandleClick, Clicked } from "../Types"
+import { TillItem,area,Product,HandleClick, Clicked, TillLayout } from "../Types"
 import { useEffect, useReducer } from "react"
 
 interface InitState{
@@ -12,6 +13,7 @@ interface InitState{
     selectedAreaId?: string 
     products?: Product[]
     clicked: false | Clicked
+    tillId?: string
 }
 
 type ActionTypes = 
@@ -22,7 +24,8 @@ type ActionTypes =
     'SET_AREA_ID' |
     'SET_PRODUCTS' |
     'SET_GRID_DIV_PRODUCT'|
-    'SET_CLICKED'
+    'SET_CLICKED'|
+    'SET_TILLGRID_ID'
 
 interface Action{
     type: ActionTypes
@@ -33,6 +36,7 @@ interface Action{
     products?: Product[]
     tillItem?: TillItem
     clicked?: false | Clicked
+    tillId?: string
 }
 
 const reducer = (state: InitState, action: Action):InitState => {
@@ -61,6 +65,8 @@ const reducer = (state: InitState, action: Action):InitState => {
                 return{...state, clicked: false}
             }
             return{...state, clicked:action.clicked}
+        case("SET_TILLGRID_ID"):
+            return{...state, tillId: action.tillId}
         default: throw new Error(`invalid action type, action type: ${action.type}`)
     }
 }
@@ -77,9 +83,12 @@ const modifyTillDiv = (till: TillItem[], tillItem: TillItem):TillItem[] => {
     return updatedTill
 }
 
+
 export default function Till(){
 
     const url: string = import.meta.env.VITE_API_URL
+    const tillId: string|undefined = useParams().tillLayoutId
+    const areaId: string|undefined = useParams().areaId
 
     const initialArgs: InitState = {
         name: "",
@@ -91,6 +100,7 @@ export default function Till(){
         products: undefined,
         clicked: false
     }
+
 
     const [state, dispatch] = useReducer(reducer,initialArgs)
 
@@ -111,9 +121,16 @@ export default function Till(){
     }
 
     const handleTillSubmit = async() => {
+        let method = "POST"
+        let path = `${url}/area/${state.selectedAreaId}/tillLayout`
 
-        const data = await fetch(`${url}/area/${state.selectedAreaId}/tillLayout`, {
-            method: "POST",
+        if(tillId){
+            method = "PUT"
+            path = path + `/${tillId}`
+        }
+
+        const data = await fetch(path, {
+            method: method,
             credentials: "include",
             headers: {
                 "Content-Type": "application/json; charset=UTF-8"
@@ -127,6 +144,30 @@ export default function Till(){
         console.log(data.statusText)
     }
 
+    useEffect(() => {
+        if(!areaId || !tillId){
+            console.log('abandoning setting till')
+        }
+
+        const fetchAndSetTill = async() => {
+            const data = await fetch(`${url}/area/${areaId}/tillLayout/${tillId}`,{
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json; charset=UTF-8"
+                },
+            })
+            const till:TillLayout = await data.json()
+            dispatch({type: "CHANGE_TILL_NAME", name: till.name})
+            dispatch({type: "GRID_SIZE_CHANGE", size: till.size})
+            dispatch({type:"SET_AREA_ID", areaId: till.area})
+            dispatch({type: "SET_TILLGRID_ID", tillId: till._id})
+            till.gridItems.map((gridItem) => {
+                dispatch({type: "SET_GRID_DIV_PRODUCT", tillItem: gridItem})
+            })
+            dispatch({type:"DISPLAY_TILL"})
+        }
+        fetchAndSetTill()
+    },[url,areaId,tillId])
 
     useEffect(() =>{
         const fetchAndSetAreas = async() => {

@@ -22,8 +22,15 @@ export const convertTillItemsToTillInstanceItems = (productInstances:ProductInst
 }
 
 export const createUpdatedCartAndGridItems = (itemId: string, gridItems:TillInstanceItem[], cart: CartItem[]) => {
-    const newGridItems = gridItems
-    const newCart = cart
+    const newGridItems:TillInstanceItem[] = gridItems.map((gridItem) => {
+        if(!gridItem.instance) return gridItem
+        return{
+            ...gridItem,
+            instance: Object.assign({}, gridItem.instance)
+        }
+    })
+    console.log(newGridItems)
+    const newCart = [...cart]
 
     const tillItemIndex = gridItems.findIndex((item) => item.instance?._id === itemId)
     const tillItem = gridItems.find((item) => item.instance?._id === itemId)

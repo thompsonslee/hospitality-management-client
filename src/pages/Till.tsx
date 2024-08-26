@@ -52,7 +52,6 @@ const reducer = (state:State, action:Action):State => {
         case("ADD_TO_CART"):
             if(!action.newGridItems || !action.newCart) throw new Error("correct actions not given")
             if(!state.till) throw new Error("till not set")
-                console.log(state.cart)
             return{
                 ...state,
                 initialTill: state.initialTill ? state.initialTill : {...state.till, gridItems: state.till.gridItems.map((item) => {
@@ -61,7 +60,7 @@ const reducer = (state:State, action:Action):State => {
                 })},
                 till:
                     {
-                        ...state.till, 
+                        ...state.till,
                         gridItems: action.newGridItems
                     },
                 cart: action.newCart
@@ -107,18 +106,17 @@ export default function Till(){
 
     const handleClick: HandleClick = (_mouseEvent, _tillGridIndex, tillItem) => {
         if(!tillItem || !state.till) return
-        if("instance" in tillItem){
-            if(!tillItem.instance) throw new Error("no tillItem instance")
+        if("instance" in tillItem && tillItem.instance){
             if(tillItem.instance.quantity === 0) return
+            console.log(state.till.gridItems)
             const {newGridItems,newCart} = createUpdatedCartAndGridItems(tillItem.instance._id, state.till.gridItems, state.cart)
-
+            console.log(newGridItems)
             dispatch({type: "ADD_TO_CART", newGridItems: newGridItems, newCart: newCart})
-        }else throw new Error("tillItem is of type TillItem but expected TillInstanceItem")
+        }else throw new Error("No instance in tillItem")
     }
+
     const handleCancelTransaction = () => {
         if(!state.cart.length || !state.initialTill){
-            console.log(state.initialTill)
-            console.log("nope")
             return;
         }
         dispatch({type:"CANCEL_TRANSACTION"})

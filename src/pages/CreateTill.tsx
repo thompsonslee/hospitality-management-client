@@ -146,9 +146,8 @@ export default function Till(){
 
     useEffect(() => {
         if(!areaId || !tillId){
-            console.log('abandoning setting till')
+            return
         }
-
         const fetchAndSetTill = async() => {
             const data = await fetch(`${url}/area/${areaId}/tillLayout/${tillId}`,{
                 credentials: "include",

@@ -29,6 +29,10 @@ export interface Transaction {
     area: string
     Date: string
 }
+export interface TransactionsWithAreaPopulated extends Omit<Transaction, "area">{
+    area: {name: string}
+}
+
 export interface TillItem{
     product: Product ,
     row: number,

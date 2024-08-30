@@ -83,8 +83,8 @@ const fetchTillWithInstanceItems = async(areaId: string, tillLayoutId: string) =
                     "content-type": "application/json;charset=UTF-8"
                 }
             })
-            ,
-            await fetch(`${url}/productInstances`,{
+            , //`${url}/area/${areaId}/productInstances`
+            await fetch(`${url}/area/${areaId}/productInstances`,{
                 credentials: "include",
                 headers: {
                         "content-type": "application/json;charset=UTF-8"
@@ -94,6 +94,7 @@ const fetchTillWithInstanceItems = async(areaId: string, tillLayoutId: string) =
     )
     const till: TillLayout = await tillFetch.json()
     const productInstances:ProductInstance[] = await productInstancesFetch.json()
+    console.log(productInstances)
 
     return  {...till, gridItems: convertTillItemsToTillInstanceItems(productInstances, till.gridItems)}
 

@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom"
+import { useParams, useNavigate } from "react-router-dom"
 import ProductDropdown from "../components/ProductDropdown"
 import TillGrid from "../components/TillGrid"
 import { TillItem,area,Product,HandleClick, Clicked, TillLayout } from "../Types"
@@ -106,6 +106,7 @@ export default function Till(){
     const url: string = import.meta.env.VITE_API_URL
     const tillId: string|undefined = useParams().tillLayoutId
     const areaId: string|undefined = useParams().areaId
+    const navigate = useNavigate()
 
     const initialArgs: InitState = {
         name: "",
@@ -165,7 +166,7 @@ export default function Till(){
                 size: state.size
             })
         })
-        console.log(data.statusText)
+        if(data.status === 200) navigate("/tillLayouts")
     }
 
     useEffect(() => {

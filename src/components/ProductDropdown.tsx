@@ -17,7 +17,7 @@ export default function ProductDropdown({clicked,products,modifyTillDiv, removeT
         modifyTillDiv({product: product,row: clicked.tillGridIndex.row,column: clicked.tillGridIndex.column})
     }
 
-    
+
     useEffect(() => {
         setPosition({x: clicked.mouseEvent.clientX, y: clicked.mouseEvent.clientY})
     },[clicked])
@@ -37,7 +37,9 @@ export default function ProductDropdown({clicked,products,modifyTillDiv, removeT
     <ul 
         style={{left: position.x, top: position.y}} 
         id="dropdown"
-        className="NO_CLOSE_ON_CLICK flex flex-col absolute w-44 border-s-black bg-zinc700 rounded p-5 gap-2 border border-solid">
+        
+        className="dropDownScrollBar NO_CLOSE_ON_CLICK flex flex-col absolute max-w-80 border-s-black
+         bg-zinc700 rounded p-5 gap-2 border border-solid overflow-y-scroll max-h-96">
         <li 
             className="bg-red400 p-3 rounded hover:bg-red600 NO_CLOSE_ON_CLICK"
             onClick={() => removeTillDiv(clicked.tillGridIndex.row,clicked.tillGridIndex.column)}

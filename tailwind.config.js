@@ -8,6 +8,7 @@ export default {
       'zinc700':'#3f3f46',
       'zinc600': '#52525b',
       'green600': '#16a34a',
+      'red400': '#f87171',
       'red600': '#dc2626',
       'white': '#f8fafc'
 

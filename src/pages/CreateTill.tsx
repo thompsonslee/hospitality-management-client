@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom"
 import ProductDropdown from "../components/ProductDropdown"
 import TillGrid from "../components/TillGrid"
 import { TillItem,area,Product,HandleClick, Clicked, TillLayout } from "../Types"
-import { useEffect, useReducer } from "react"
+import { useCallback, useEffect, useReducer } from "react"
 
 interface InitState{
     name: string
@@ -15,7 +15,11 @@ interface InitState{
     clicked: false | Clicked
     tillId?: string
 }
-
+interface RemoveLocation{
+    product: null
+    row: number,
+    column: number
+}
 type ActionTypes = 
     'CHANGE_TILL_NAME' |
     'GRID_SIZE_CHANGE' |
@@ -24,6 +28,7 @@ type ActionTypes =
     'SET_AREA_ID' |
     'SET_PRODUCTS' |
     'SET_GRID_DIV_PRODUCT'|
+    'REMOVE_GRID_DIV_PRODUCT'|
     'SET_CLICKED'|
     'SET_TILLGRID_ID'
 
@@ -35,6 +40,7 @@ interface Action{
     areaId?: string
     products?: Product[]
     tillItem?: TillItem
+    removeLocation?: RemoveLocation
     clicked?: false | Clicked
     tillId?: string
 }
@@ -60,6 +66,9 @@ const reducer = (state: InitState, action: Action):InitState => {
         case("SET_GRID_DIV_PRODUCT"):
             if(!action.tillItem) throw new Error("no tillItem given")
             return{...state, till: modifyTillDiv(state.till, action.tillItem )}
+        case("REMOVE_GRID_DIV_PRODUCT"):
+            if(!action.removeLocation) throw new Error("no removeLocation object given")
+                return{...state, till: modifyTillDiv(state.till, action.removeLocation)}
         case("SET_CLICKED"):
             if(!action.clicked){
                 return{...state, clicked: false}
@@ -70,18 +79,26 @@ const reducer = (state: InitState, action: Action):InitState => {
         default: throw new Error(`invalid action type, action type: ${action.type}`)
     }
 }
-const modifyTillDiv = (till: TillItem[], tillItem: TillItem):TillItem[] => {
-
+const modifyTillDiv = (till: TillItem[], tillItemOrRemoveItem: TillItem | RemoveLocation):TillItem[] => {
+    console.log(tillItemOrRemoveItem)
     const updatedTill = till
     for(let i=0; i<updatedTill.length; i++){
-        if(updatedTill[i].row === tillItem.row && updatedTill[i].row === tillItem.column){
-            updatedTill[i].product = tillItem.product
+        if((updatedTill[i].row === tillItemOrRemoveItem.row) && (updatedTill[i].column === tillItemOrRemoveItem.column)){
+            if(tillItemOrRemoveItem.product === null){
+                console.log("splicing till")
+                updatedTill.splice(i,1)
+            }else{
+                updatedTill[i].product = tillItemOrRemoveItem.product
+            }
             return updatedTill
         }
     }
-    updatedTill.push(tillItem)
+    if(!tillItemOrRemoveItem.product) return till
+    updatedTill.push(tillItemOrRemoveItem)
     return updatedTill
 }
+
+
 
 
 export default function Till(){
@@ -105,14 +122,21 @@ export default function Till(){
     const [state, dispatch] = useReducer(reducer,initialArgs)
 
     const handleClick:HandleClick = (mouseEvent, tillGridIndex) => {
+        console.log("clicked")
         const element = mouseEvent.target as Element
         if(!element.classList.contains("tillGridDiv")){
             dispatch({type:"SET_CLICKED", clicked: false})
         }
+        if(!tillGridIndex) throw new Error("tillGridIndex object not given to handleClick function")
         dispatch({type: "SET_CLICKED", clicked: {mouseEvent, tillGridIndex}})
     }
     const modifyTillDiv = (tillItem: TillItem) => {
         dispatch({type:"SET_GRID_DIV_PRODUCT", tillItem: tillItem})
+        dispatch({type: "SET_CLICKED", clicked: false})
+    }
+
+    const removeTillDiv = (row: number, column: number) => {
+        dispatch({type: 'REMOVE_GRID_DIV_PRODUCT', removeLocation: {product: null, row: row, column: column} })
         dispatch({type: "SET_CLICKED", clicked: false})
     }
 
@@ -195,6 +219,28 @@ export default function Till(){
         fetchAndSetProducts()
     },[url])
 
+
+    const clickFunctionCallback = useCallback((e:MouseEvent) => {
+        if(e.target instanceof Element){
+            if(e.target.className.split(" ").includes("NO_CLOSE_ON_CLICK")) return
+            dispatch({type:"SET_CLICKED"})
+            return
+        }
+        dispatch({type:"SET_CLICKED"})
+    },[])
+
+
+
+    const setUpOnClickEventListener = () => {
+        document.addEventListener("click",clickFunctionCallback)
+    }
+
+    useEffect(() => {
+        return () => {
+            document.removeEventListener("click",clickFunctionCallback)
+        }
+    },[clickFunctionCallback])
+
     return(
         <div className="flex flex-grow justify-center items-center">
             {(state.displayTill) ? (
@@ -209,15 +255,23 @@ export default function Till(){
                                     clicked={state.clicked}
                                     products={state.products}
                                     modifyTillDiv={modifyTillDiv}
+                                    removeTillDiv={removeTillDiv}
                                 />
                             )}
                     </TillGrid>
-                    <button onClick={() => handleTillSubmit()}>submit</button>
+                    <button 
+                        className="rounded p-5 text-white bg-zinc800 ml-5 hover:bg-green600 disabled:text-zinc600 disabled:hover:bg-zinc800" 
+                        onClick={() => handleTillSubmit()}
+                        disabled={state.till.length === 0}
+                        >
+                        Finish
+                    </button>
                 </>
             ) : (
                 <>
                     <form className="flex flex-col justify-center rounded bg-zinc800 p-5 gap-2 text-white" onSubmit={(e) => {
                         e.preventDefault()
+                        setUpOnClickEventListener()
                         dispatch({type: "DISPLAY_TILL"})}}>
                         <div className="flex flex-col">
                             <label>Till Name</label>

@@ -23,11 +23,11 @@ export default function TillGridDiv({tillItem = undefined,handleClick,tillGridIn
     return(
         <div 
             className="w-full h-full text-center flex
-             tillGridDiv border-solid min-h-10 min-w-10 overflow-hidden 
-             border-black aspect-square"
+             border-solid min-h-10 min-w-10 overflow-hidden 
+             border-black aspect-square NO_CLOSE_ON_CLICK"
             >
             <div  
-                className="flex items-center justify-center w-full h-full rounded bg-zinc800 m-1 mt-2 "          
+                className="flex items-center justify-center w-full h-full rounded bg-zinc800 m-1 mt-2 NO_CLOSE_ON_CLICK hover:bg-zinc700"          
                 onClick={
                 (e) => handleClick(e, tillGridIndex, tillItem)
             }>

@@ -12,8 +12,6 @@ interface Props{
 
 export default function TillGrid({tillArray, size, handleClick, children}:Props){
 
-    console.log(tillArray)
-
     const getTillItemAtIndex = (row:number,column:number) => {
         return tillArray.find((tillItem) => tillItem.row === row && tillItem.column === column)
     }

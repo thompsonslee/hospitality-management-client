@@ -1,7 +1,8 @@
-import UserFormElement from "./FormElement"
+import UserFormElement from "./UserFormElement"
 import { useState } from "react"
 import UserFormErrorBox from "./UserFormErrorBox"
 import { useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
 interface props {
     formType: "login" | "register"
 
@@ -10,6 +11,7 @@ type formData = {
     username: string,
     password: string,
     pwConfirm?: string
+    isDemoAccount?: boolean
 }
 
 
@@ -21,10 +23,15 @@ export default function UserForm({formType}:props){
         username: "",
         password: ""
     }
-    if(formType === "register") initalFormData["pwConfirm"] = ""
+    if(formType === "register"){
+        initalFormData["pwConfirm"] = ""
+        initalFormData["isDemoAccount"] = true
+    }
 
     const [formData, setFormData] = useState(initalFormData)
     const [errors, setErrors] = useState("")
+
+    console.log(formData)
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault()
@@ -71,6 +78,13 @@ export default function UserForm({formType}:props){
     }
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        console.log(event.target.type)
+        if(event.target.type === "checkbox"){
+            console.log("type is checkbox")
+           const {name,checked} = event.target
+           setFormData({...formData,[name]: checked})
+           return
+        }
         const {name,value} = event.target
         setFormData({...formData,[name]: value})
     }
@@ -91,13 +105,35 @@ export default function UserForm({formType}:props){
                 type = "password"
                 onChange={handleChange}
             />
+            {formType === "login" && <div
+                className="text-white text-sm w-full ">
+                Don't have an account? 
+                <Link 
+                    className="text-green600 font-bold ml-1"
+                    to="/register">
+                    Register
+                </Link>
+            </div>}
             {((formType === "register") && (formData.pwConfirm || formData.pwConfirm === "")) && (
-                <UserFormElement
-                    name = "pwConfirm"
-                    data = {formData.pwConfirm}
-                    type = "password"
-                    onChange={handleChange}
-                />
+                <>
+                    <UserFormElement
+                        label="Confirm Password"
+                        name = "pwConfirm"
+                        data = {formData.pwConfirm}
+                        type = "password"
+                        onChange={handleChange}
+                    />
+                    <div className="flex">
+                        <label htmlFor="isDemoAccount">Demo Account</label>
+                        <input 
+                            className="ml-2"
+                            name="isDemoAccount" 
+                            type="checkbox"
+                            onChange={handleChange}
+                            defaultChecked={true}
+                        />
+                    </div>
+                </>
             )}
             <button className="bg-green600 rounded p-2 mt-5 text-white" type="submit">Submit</button>
         </form>

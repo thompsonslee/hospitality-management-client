@@ -11,10 +11,12 @@ export default function LoginPage({type}:props){
     return(
         (type === "login") ? (
             <UserForm 
+                key="login"
                 formType="login"
             />
         ) : (
             <UserForm
+                key="register"
                 formType="register"
             />
         )

@@ -16,7 +16,6 @@ type formData = {
 
 
 export default function UserForm({formType}:props){
-
     const navigate = useNavigate()
 
     const initalFormData:formData = {

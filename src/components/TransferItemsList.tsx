@@ -17,9 +17,9 @@ export default function TransferItemsList({areaName, items, transferItem}:Props)
     }
 
     return(
-        <div className="flex flex-col gap-2 w-1/2">
+        <div className="flex flex-col gap-2 w-1/2 ">
             <h1 className="text-2xl self-center">{areaName}</h1>
-            <ul className="flex gap-2">
+            <ul className="flex gap-2 flex-wrap">
                 {items.map((item) => {
                     return(
                         <li

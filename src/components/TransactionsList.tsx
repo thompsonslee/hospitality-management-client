@@ -28,7 +28,7 @@ export default function TransactionsList({transactions,page,setPage}:Props){
                 <TransactionListAmountColumn data={transactions.map((item) => ({cost: item.cost, type: item.type}))} />
                 <TransactionListColumn data={transactions.map(item => item.area.name)} />
             </div>
-            {(page != 1 && transactions.length === 10) && (
+            {((page != 1) || transactions.length === 10) && (
                 <div className="flex self-end justify-self-end gap-3 mr-5 mb-5">
                     <button 
                         disabled={page === 1}

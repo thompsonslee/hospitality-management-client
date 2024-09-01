@@ -13,3 +13,29 @@ label{
 :root{
     background-color: #18181b;
 }
+
+
+@keyframes grow-shrink{
+    0%, 100% {
+        transform: scale(1);
+    }
+    50%{
+        transform:scale(1.5);
+    }
+}
+.loadingDotsContainer div{
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    animation: grow-shrink 1.5s infinite;
+}
+.loadingDotsContainer div:nth-child(1){
+    animation-delay: 0s;
+}
+.loadingDotsContainer div:nth-child(2){
+    animation-delay: 0.3s;
+}
+.loadingDotsContainer div:nth-child(3) {
+    animation-delay: 0.6s;
+}
+

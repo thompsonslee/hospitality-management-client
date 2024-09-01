@@ -66,9 +66,11 @@ export default function App(){
                     <Route path="/area/:areaId/tillLayouts/:tillLayoutId" element={<Till />} />
                     <Route path="/area/:areaId/tillLayouts/:tillLayoutId/edit" element={<CreateTill />} />
                     <Route path="/transactions" element={<Transactions />} />
+                    <Route path="/loading2" element={<Loading/>} /> 
                 </Route>
                 <Route path="/login" element={<LoginPage type="login" />} />
                 <Route path="/register" element={<LoginPage type="register" />} />
+                <Route path="/loading" element={<Loading/>} /> 
             </>
         ))} 
         />

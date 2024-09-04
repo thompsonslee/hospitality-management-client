@@ -1,4 +1,4 @@
-import { RouterProvider, createBrowserRouter, createRoutesFromElements, Route, Navigate, Outlet} from "react-router-dom"
+import { RouterProvider, createBrowserRouter, createRoutesFromElements, Route, Navigate, Outlet, redirect} from "react-router-dom"
 import Nav from "./components/Nav"
 import Home from "./pages/Home"
 import Area from "./pages/Area"
@@ -14,6 +14,7 @@ import { useState } from "react"
 import CreateTill from "./pages/CreateTill"
 import AreaTills from "./pages/AreaTills"
 import Till from "./pages/Till"
+import ErrorPage from "./pages/Error"
 
 const url: string = import.meta.env.VITE_API_URL
 
@@ -27,6 +28,19 @@ const checkSession = async() => {
     })
     return(req.status === 200)
 }
+
+const logout = async() => {
+    const req = await fetch(`${url}/logout`,{
+        method: "post",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json; charset=UTF-8"
+        },
+    })
+    if(req.status === 200)
+    return redirect("/login")
+}
+
 
 const ProtectedRoutes = () => {
     const [authStatus,setAuthStatus] = useState('loading')
@@ -53,8 +67,8 @@ export default function App(){
     return(
         <RouterProvider router = {createBrowserRouter(createRoutesFromElements(
             <>
-                <Route path="/" element={<ProtectedRoutes />}>
-                    <Route path="/home" element={<Home />} />
+                <Route path="/" element={<ProtectedRoutes />} errorElement={<ErrorPage />}>
+                    <Route path="/" element={<Home />} />
                     <Route path="/areas/" element={<Areas /> } />
                     <Route path="/tillLayouts" element={<AllTillsPage />} />
                     <Route path="/createTill" element={<CreateTill />} />
@@ -67,10 +81,10 @@ export default function App(){
                     <Route path="/area/:areaId/tillLayouts/:tillLayoutId/edit" element={<CreateTill />} />
                     <Route path="/transactions" element={<Transactions />} />
                     <Route path="/loading2" element={<Loading/>} /> 
+                    <Route path="/logout" loader={logout} />
                 </Route>
                 <Route path="/login" element={<LoginPage type="login" />} />
                 <Route path="/register" element={<LoginPage type="register" />} />
-                <Route path="/loading" element={<Loading/>} /> 
             </>
         ))} 
         />

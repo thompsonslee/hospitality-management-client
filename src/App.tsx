@@ -17,9 +17,12 @@ import Till from "./pages/Till"
 import ErrorPage from "./pages/Error"
 
 const url: string = import.meta.env.VITE_API_URL
-
+const test: string = import.meta.env.VITE_TEST_VAR
 
 const checkSession = async() => {
+    console.log(test)
+    if(!url) throw new Error("no VITE_API_URL")
+        console.log(url)
     const req = await fetch(`${url}/sessionActive`,{
         credentials: "include",
         headers: {
@@ -52,7 +55,6 @@ const ProtectedRoutes = () => {
         }
         else(setAuthStatus('authorized'))
     })
-
     if(authStatus === 'loading') return(<Loading />)
     if(authStatus === 'unauthorized')return (<Navigate to={"/login"} />)
     if(authStatus === 'authorized')return(

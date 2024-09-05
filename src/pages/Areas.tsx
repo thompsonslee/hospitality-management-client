@@ -8,6 +8,7 @@ type area = {
 }
 type status = "loading" | "fulfilled"
 
+const url: string = import.meta.env.VITE_API_URL
 
 export default function Areas(){
 
@@ -16,7 +17,7 @@ export default function Areas(){
 
     useEffect(() => {
     const getAreas = async () => {
-        const data = await fetch("http://localhost:3000/area",{
+        const data = await fetch(`${url}/area`,{
             method: "get",
             headers: {
                 "content-type": "application/json;charset=UTF-8"

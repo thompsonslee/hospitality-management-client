@@ -14,6 +14,8 @@ type formData = {
     isDemoAccount?: boolean
 }
 
+const url: string = import.meta.env.VITE_API_URL
+
 
 export default function UserForm({formType}:props){
     const navigate = useNavigate()
@@ -39,7 +41,7 @@ export default function UserForm({formType}:props){
                 setErrors("password does not match")
                 return
             }
-            fetch("http://localhost:3000/register",{
+            fetch(`${url}/register`,{
                 method: "post",
                 headers: {
                     "Content-Type": "application/json; charset=UTF-8"
@@ -55,7 +57,7 @@ export default function UserForm({formType}:props){
             return
         }
         if(formType === "login"){
-            fetch("http://localhost:3000/login",{
+            fetch(`${url}/login`,{
                 method: "post",
                 credentials: "include",
                 headers: {
